@@ -1,3 +1,8 @@
+<?php
+  require_once('includes/config.php');
+  $queryFilms ="SELECT * FROM Films";
+  $resultFilms = $mysqli->query( $queryFilms );
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -22,8 +27,24 @@ include("includes/header.php");
                 <h2>Catalogue</h2>
               </div>
               <section class="twoColumn">
-                <div>
-                <!-- Film Listing Here -->
+                <div class="listing">
+                  <table>
+                    <tr>
+                      <th>Film</th>
+                      <th>Certificate</th>
+                      <th>Price</th>
+                    </tr>
+                      <!-- Film Listing Here -->
+                      <?php
+                      while ($obj = $resultFilms -> fetch_object()){
+                        echo "<tr>";
+                        echo"<td> <a href=\"film-details.php?filmID={$obj->filmID}\">{$obj->filmTitle}</a></td>";
+                        echo "<td> {$obj->filmCertificate}</td>";
+                        echo "<td>&pound; {$obj->filmPrice}</td>";
+                        echo "</tr>";
+                      }
+                      ?>
+                  </table>    
                 </div>
 		            <div class="sideBar">
                 <h3>Featured Film</h3>

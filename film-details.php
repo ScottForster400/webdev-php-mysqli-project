@@ -1,12 +1,22 @@
 <?php
 require_once("includes/config.php");
 // query to get film by filmID
-$getFilmID = $_GET["filmID"];
+// if(!isset($_GET["filmID"])){
+//   $getFilmID = null;
+// }else{
+//   $getFilmID = $_GET["filmID"];
+// }
+
+$getFilmID = $_GET['filmID'] ?? null;
+
 $stmt = $mysqli->prepare( "SELECT * FROM Films WHERE filmID = ?" );
 $stmt->bind_param( 'i', $getFilmID );
 $stmt->execute();
 $result = $stmt->get_result();
 $obj = $result->fetch_object();
+if($result->num_rows <= 0){
+  header("Location: catalogue.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +39,7 @@ include("includes/header.php");
 <div class="mainContainer">
   <main>
     <div class="banner">
-      <h2>Film Title Here</h2>
+      <h2><?php echo $obj->filmTitle; ?></h2>
     </div>
     <section class="twoColumn">
     <div>
@@ -40,6 +50,7 @@ include("includes/header.php");
         echo "</div>";
         echo "<div>";
         echo "<p>{$obj->filmDescription}</p>";
+        echo "<p>{$obj-> filmCertificate}</p>";
         echo "</div>";
         echo "</div>";
         ?>
